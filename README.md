@@ -1,6 +1,6 @@
 # Shadowrocket Rules
 
-Public Shadowrocket rule templates for smart split routing on macOS, including direct rules for Apple Software Update.
+Public Shadowrocket smart split routing config for macOS, with Apple Software Update routed directly.
 
 ## Problem
 
@@ -13,34 +13,20 @@ MSU_ERR_GLOBAL_TICKET_INVALID(53)
 
 The local diagnosis showed Software Update traffic was routed through a Shadowrocket Network Extension tunnel and local HTTP/HTTPS proxy at `127.0.0.1:1082`. Apple update personalization and signing endpoints are sensitive to routing, cache, TLS interception, and regional ticket generation. Keeping these domains direct is safer than routing the whole Apple update path through a proxy.
 
-## Files
+## File
 
-- `shadowrocket-smart-split.conf`: full public template based on the local configuration.
-- `apple-software-update-direct.rules`: small drop-in rule block for existing configs.
+- `shadowrocket-smart-split.conf`: the single public config template.
 
 ## Recommended Fix
 
-Place the Apple Software Update direct rules before broad Apple, China GeoIP, and final fallback rules:
+Use `shadowrocket-smart-split.conf` directly, or copy its Apple section into your own Shadowrocket config. Keep the order:
 
-```text
-DOMAIN,gs.apple.com,DIRECT
-DOMAIN,gdmf.apple.com,DIRECT
-DOMAIN,mesu.apple.com,DIRECT
-DOMAIN,xp.apple.com,DIRECT
-DOMAIN,ocsp.apple.com,DIRECT
-DOMAIN,valid.apple.com,DIRECT
-DOMAIN-SUFFIX,swcdn.apple.com,DIRECT
-DOMAIN-SUFFIX,swdownload.apple.com,DIRECT
-DOMAIN-SUFFIX,swdist.apple.com,DIRECT
-DOMAIN-SUFFIX,swscan.apple.com,DIRECT
-DOMAIN-SUFFIX,updates.cdn-apple.com,DIRECT
-DOMAIN-SUFFIX,oscdn.apple.com,DIRECT
-DOMAIN-SUFFIX,mzstatic.com,DIRECT
-DOMAIN-SUFFIX,itunes.apple.com,DIRECT
-DOMAIN-SUFFIX,apple.com,DIRECT
-DOMAIN-SUFFIX,icloud.com,DIRECT
-DOMAIN-SUFFIX,icloud-content.com,DIRECT
-```
+1. Apple Private Relay proxy rules, if you intentionally proxy Private Relay.
+2. Apple Software Update, beta enrollment, recovery, and certificate validation direct rules.
+3. General Apple direct rules such as `apple.com`, `icloud.com`, and `mzstatic.com`.
+4. China GeoIP and final fallback rules at the end.
+
+This order matters because Shadowrocket rules are evaluated top to bottom. A broad `apple.com,DIRECT` rule placed too early can make a later `apple-relay.apple.com,PROXY` rule unreachable.
 
 ## Verify on macOS
 
@@ -58,4 +44,9 @@ For the safest macOS beta install attempt, keep Shadowrocket disconnected or mak
 
 - This repository intentionally does not include proxy nodes, subscription URLs, passwords, tokens, or account-specific values.
 - If your proxy policy group is not named `PROXY`, replace `,PROXY` with your actual policy group name.
-- Apple Private Relay domains are kept on `PROXY` in the full template because the original local policy intentionally did that.
+- Apple Private Relay domains are kept on `PROXY` in the template because the original local policy intentionally did that.
+
+## Sources
+
+- Apple Support: https://support.apple.com/en-us/101555
+- Apple Platform Deployment: https://support.apple.com/guide/deployment/about-software-updates-depc4c80847a/web
