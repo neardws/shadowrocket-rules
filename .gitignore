@@ -1,0 +1,14 @@
+.DS_Store
+*.log
+*.tmp
+*.bak
+
+# Do not commit private Shadowrocket profiles or subscription exports.
+private/
+*.mobileconfig
+*.conf.local
+*subscription*
+*subscribe*
+*token*
+*secret*
+*password*

@@ -1,0 +1,21 @@
+# Drop-in rules for macOS Software Update through Shadowrocket.
+#
+# Put this block before broad Apple, China GeoIP, and FINAL rules.
+
+DOMAIN,gs.apple.com,DIRECT
+DOMAIN,gdmf.apple.com,DIRECT
+DOMAIN,mesu.apple.com,DIRECT
+DOMAIN,xp.apple.com,DIRECT
+DOMAIN,ocsp.apple.com,DIRECT
+DOMAIN,valid.apple.com,DIRECT
+DOMAIN-SUFFIX,swcdn.apple.com,DIRECT
+DOMAIN-SUFFIX,swdownload.apple.com,DIRECT
+DOMAIN-SUFFIX,swdist.apple.com,DIRECT
+DOMAIN-SUFFIX,swscan.apple.com,DIRECT
+DOMAIN-SUFFIX,updates.cdn-apple.com,DIRECT
+DOMAIN-SUFFIX,oscdn.apple.com,DIRECT
+DOMAIN-SUFFIX,mzstatic.com,DIRECT
+DOMAIN-SUFFIX,itunes.apple.com,DIRECT
+DOMAIN-SUFFIX,apple.com,DIRECT
+DOMAIN-SUFFIX,icloud.com,DIRECT
+DOMAIN-SUFFIX,icloud-content.com,DIRECT
